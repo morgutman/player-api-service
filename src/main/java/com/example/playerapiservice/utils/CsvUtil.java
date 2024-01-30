@@ -24,12 +24,16 @@ public class CsvUtil<T> {
         validateFileByPath(csvFilePath);
 
         try (CSVReader reader = new CSVReader(new FileReader(csvFilePath))) {
+            // Configure the mapping strategy based on the header column names
             MappingStrategy<T> strategy = new HeaderColumnNameMappingStrategy<>();
             strategy.setType(targetClass);
+
+            // Set up the CsvToBean instance with the CSV reader and mapping strategy
             CsvToBean<T> csv = new CsvToBean<>();
             csv.setCsvReader(reader);
             csv.setMappingStrategy(strategy);
 
+            // Parse the CSV data and return a list of objects
             return csv.parse();
         } catch (IOException e) {
             throw new FileProcessingException("Error occurred while processing the file");
